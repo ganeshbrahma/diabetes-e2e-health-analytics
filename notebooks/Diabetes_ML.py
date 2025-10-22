@@ -57,7 +57,7 @@ cols = ["pregnancies","glucose","bloodpressure","skinthickness",
         "insulin","bmi","diabetespedigreefunction","age","outcome"]
 df = df.select(*cols, "ingested_at")
 
-# Treat zero-as-missing for medical measures commonly zero-filled
+# Treat zero as missing for medical measures commonly zero filled
 for c in ["glucose","bloodpressure","skinthickness","insulin","bmi"]:
     df = df.withColumn(c, F.when(F.col(c)==0, None).otherwise(F.col(c)))
 
@@ -119,8 +119,8 @@ seed = 42
 # Use Databricks tracking
 mlflow.set_tracking_uri("databricks")
 
-# Build an experiment path under your user folder (which exists)
-user = spark.sql("SELECT current_user()").first()[0]          # e.g., 'gxk53780@ucmo.edu'
+# Build an experiment path under user folder (which exists)
+user = spark.sql("SELECT current_user()").first()[0]        
 EXP_PATH = f"/Users/{user}/health_diabetes_experiment"
 
 # Create the experiment if missing, then get its id
@@ -197,7 +197,7 @@ with mlflow.start_run(run_name=f"register_{name}", experiment_id=exp_id):
 
 # MAGIC %md
 # MAGIC # Holdout evaluation, calibration & SHAP
-# MAGIC ### Produce business-ready artifacts: ROC/PR curves, confusion matrix at chosen threshold, calibration, SHAP global + local explanations; log to MLflow.
+# MAGIC ### Produce business ready artifacts: ROC/PR curves, confusion matrix at chosen threshold, calibration, SHAP global + local explanations; log to MLflow.
 
 # COMMAND ----------
 
